@@ -2,6 +2,7 @@ from tkinter import *
 from tkinter import messagebox
 import string
 import random
+import json
 # ---------------------------- PASSWORD GENERATOR ------------------------------- #
 
 # Password with X length
@@ -21,35 +22,56 @@ def password_manager():
     pass_entry.insert(0, new_pass)  # Insert the newly generated password
     pass_entry.clipboard_clear()
     pass_entry.clipboard_append(new_pass)  # Copy the string to clipboard
-    print(new_pass)
+    # print(new_pass)
 # ---------------------------- SAVE PASSWORD ------------------------------- #
 
 
 def save():
-    print(use_email_entry.get())
-    print(website_entry.get())
-    print(pass_entry.get())
+    # print(use_email_entry.get())
+    # print(website_entry.get())
+    # print(pass_entry.get())
     website = website_entry.get()
     email = use_email_entry.get()
     password = pass_entry.get()
+    new_data = {
+        website:{
+            'Email': email,
+            'Password': password
+        }
+    }
 
     if len(website) == 0 or len(email) == 0 or len(password) == 0:
-        print(len(website), len(email), len(password))
+        #print(len(website), len(email), len(password))
         messagebox.showinfo(title="Oops", message="Please make sure you haven't left any fields empty.")
     else:
         if messagebox.askokcancel(title="Info", message=f"Confident with saving information?\n "
                                                   f"Web: {website}"
                                                   f"\nEmail: {email} "
                                                   f"\nPass: {password} "):
-            # Save data to file.text
+
             messagebox.showinfo(title="Info", message="Your information has been saved successfully.")
-            f = open("db.txt", "a")
-            f.write(f'\n{website_entry.get()} | {use_email_entry.get()} | {pass_entry.get()}')
-            f.close()
+            # Save data to file.text
+            # with open("db.txt", "a") as database_file:
+            #     database_file.write(f'\n{website} | {email} | {password}')
+
+            # Save data to json file
+            try:
+                with open("db.json", "r") as data_file:
+                    data = json.load(data_file)
+                    data.update(new_data)
+                    print(data)
+            except FileNotFoundError:
+                with open("db.json", "w") as data_file:
+                    json.dump(new_data, data_file, indent=4)
+            else:
+                with open("db.json", "w") as data_file:
+                    json.dump(data, data_file, indent=4)
+
             website_entry.delete(0, 'end')
             pass_entry.delete(0, 'end')
             #popup()
 
+# וUsed this solution before found messagebox
 # def popup():
 #     global top
 #     top = Toplevel(windows)
