@@ -3,13 +3,17 @@ from tkinter import messagebox
 import string
 import random
 import json
+
+# ---------------------------- SEARCH ------------------------------- #
+# with open("db.json", "r") as data_file:
+#     print(json.load(data_file))
+
 # ---------------------------- PASSWORD GENERATOR ------------------------------- #
 
 # Password with X length
 # The password will be created from s1 to s4 list
 # All characters will be random from all lists - Uppercase, Lowercase, Numbers Symbols
 db_digit = string.printable
-
 
 def create_random_pass(password_length=10):
     password = random.choices(db_digit, k=password_length) # With 'choices' no need the loop
@@ -60,14 +64,19 @@ def save():
                     data = json.load(data_file)
                     # data.update(new_data)
                     print(data)
+
             except FileNotFoundError:
+                with open("db.json", "w") as data_file:
+                    json.dump(new_data, data_file, indent=4)
+            # If no data in file
+            except json.decoder.JSONDecodeError:
                 with open("db.json", "w") as data_file:
                     json.dump(new_data, data_file, indent=4)
             else:
                 data.update(new_data)
-
                 with open("db.json", "w") as data_file:
                     json.dump(data, data_file, indent=4)
+
             finally:
                 website_entry.delete(0, 'end')
                 pass_entry.delete(0, 'end')
@@ -109,8 +118,8 @@ pass_label = Label(text="Password:")
 pass_label.grid(row=3, column=0)
 
 # Entries
-website_entry = Entry(width=35)
-website_entry.grid(row=1, column=1, columnspan=2)
+website_entry = Entry(width=21)
+website_entry.grid(row=1, column=1)
 ## Add cursor to entry
 website_entry.focus()
 website_entry.insert(END, "")
@@ -122,7 +131,9 @@ pass_entry.grid(row=3, column=1)
 pass_entry.insert(END, "")
 
 # Button's
-generate_button = Button(text="Generate Pass", command=password_manager)
+search_button = Button(text="Search", command="", width=10)
+search_button.grid(row=1, column=2, columnspan=2)
+generate_button = Button(text="Generate Pass", command=password_manager, width=10)
 generate_button.grid(row=3, column=2, columnspan=2)
 add_button = Button(text="Add", width=33, command=save)
 add_button.grid(row=4, column=1, columnspan=2)
