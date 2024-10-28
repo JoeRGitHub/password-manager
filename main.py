@@ -58,17 +58,19 @@ def save():
             try:
                 with open("db.json", "r") as data_file:
                     data = json.load(data_file)
-                    data.update(new_data)
+                    # data.update(new_data)
                     print(data)
             except FileNotFoundError:
                 with open("db.json", "w") as data_file:
                     json.dump(new_data, data_file, indent=4)
             else:
+                data.update(new_data)
+
                 with open("db.json", "w") as data_file:
                     json.dump(data, data_file, indent=4)
-
-            website_entry.delete(0, 'end')
-            pass_entry.delete(0, 'end')
+            finally:
+                website_entry.delete(0, 'end')
+                pass_entry.delete(0, 'end')
             #popup()
 
 # וUsed this solution before found messagebox
