@@ -10,16 +10,22 @@ import json
 
 def search_record():
     website_search_record = website_entry.get().lower()
-    with open("db.json", "r") as data_file:
-        for key, value in json.load(data_file).items():
-            if key == website_search_record:
-                email = value["Email"]
-                password = value["Password"]
-                messagebox.showinfo(title=f'{key}', message=f'Email:{email} \nPassword:{password}')
-                website_entry.delete(0, 'end')
-                break
+    try:
+        with open("db.json", "r") as data_file:
+            for key, value in json.load(data_file).items():
+                if key == website_search_record:
+                    email = value["Email"]
+                    password = value["Password"]
+                    messagebox.showinfo(title=f'{key}', message=f'Email:{email} \nPassword:{password}')
+                    website_entry.delete(0, 'end')
+                    break
+            else:
+                messagebox.showinfo(title="Oops", message="No record:" f'\n{website_search_record}')
+    except FileNotFoundError:
+        if website_search_record == '':
+            messagebox.showinfo(title="No Data", message="Please add data to search")
         else:
-            messagebox.showinfo(title="Oops", message="No record:" f'\n{website_search_record}')
+            messagebox.showinfo(title="No Data", message="No record:" f'\n{website_search_record}')
 
 # ---------------------------- PASSWORD GENERATOR ------------------------------- #
 
@@ -61,12 +67,12 @@ def save():
         #print(len(website), len(email), len(password))
         messagebox.showinfo(title="Oops", message="Please make sure you haven't left any fields empty.")
     else:
-        if messagebox.askokcancel(title="Info", message=f"Confident with saving information?\n "
+        if messagebox.askokcancel(title="Info", message=f"Save info?\n "
                                                   f"Web: {website}"
-                                                  f"\nEmail: {email} "
-                                                  f"\nPass: {password} "):
+                                                  f"\nEmail: {email}"
+                                                  f"\nPass: {password}"):
 
-            messagebox.showinfo(title="Info", message="Your information has been saved successfully.")
+            messagebox.showinfo(title="Info", message="Password saved!")
             # Save data to file.text
             # with open("db.txt", "a") as database_file:
             #     database_file.write(f'\n{website} | {email} | {password}')
