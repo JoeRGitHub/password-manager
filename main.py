@@ -4,9 +4,22 @@ import string
 import random
 import json
 
+
 # ---------------------------- SEARCH ------------------------------- #
-# with open("db.json", "r") as data_file:
-#     print(json.load(data_file))
+
+
+def search_record():
+    website_search_record = website_entry.get().lower()
+    with open("db.json", "r") as data_file:
+        for key, value in json.load(data_file).items():
+            if key == website_search_record:
+                email = value["Email"]
+                password = value["Password"]
+                messagebox.showinfo(title="Record", message=f'Email:{email} \nPassword:{password}')
+                website_entry.delete(0, 'end')
+                break
+        else:
+            messagebox.showinfo(title="Oops", message="No record:" f'\n{website_search_record}')
 
 # ---------------------------- PASSWORD GENERATOR ------------------------------- #
 
@@ -34,8 +47,8 @@ def save():
     # print(use_email_entry.get())
     # print(website_entry.get())
     # print(pass_entry.get())
-    website = website_entry.get()
-    email = use_email_entry.get()
+    website = website_entry.get().lower()
+    email = use_email_entry.get().lower()
     password = pass_entry.get()
     new_data = {
         website:{
@@ -131,7 +144,7 @@ pass_entry.grid(row=3, column=1)
 pass_entry.insert(END, "")
 
 # Button's
-search_button = Button(text="Search", command="", width=10)
+search_button = Button(text="Search", command=search_record, width=10)
 search_button.grid(row=1, column=2, columnspan=2)
 generate_button = Button(text="Generate Pass", command=password_manager, width=10)
 generate_button.grid(row=3, column=2, columnspan=2)
