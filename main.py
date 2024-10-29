@@ -15,7 +15,7 @@ def search_record():
             if key == website_search_record:
                 email = value["Email"]
                 password = value["Password"]
-                messagebox.showinfo(title="Record", message=f'Email:{email} \nPassword:{password}')
+                messagebox.showinfo(title=f'{key}', message=f'Email:{email} \nPassword:{password}')
                 website_entry.delete(0, 'end')
                 break
         else:
@@ -26,7 +26,7 @@ def search_record():
 # Password with X length
 # The password will be created from s1 to s4 list
 # All characters will be random from all lists - Uppercase, Lowercase, Numbers Symbols
-db_digit = string.printable
+db_digit = string.printable #ascii
 
 def create_random_pass(password_length=10):
     password = random.choices(db_digit, k=password_length) # With 'choices' no need the loop
